@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Transfer Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto p-6 max-w-6xl">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-indigo-700 mb-2">Money Transfer Service</h1>
+            <p class="text-gray-600">Fast, secure, and reliable international money transfers</p>
+        </header>
+        
+        <div class="flex justify-center mb-8">
+            <div class="inline-flex rounded-md shadow-sm" role="group">
+                <button id="sendModeBtn" type="button" class="px-4 py-2 text-sm font-medium text-white bg-indigo-700 rounded-l-lg hover:bg-indigo-800 focus:z-10 focus:ring-2 focus:ring-indigo-500 focus:bg-indigo-800">
+                    Send Money
+                </button>
+                <button id="receiveModeBtn" type="button" class="px-4 py-2 text-sm font-medium text-indigo-700 bg-white rounded-r-lg border border-indigo-200 hover:bg-indigo-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-500 focus:text-indigo-700">
+                    Receive Money
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white shadow-xl rounded-2xl p-8 border border-indigo-100">
+                <h2 class="text-2xl font-semibold mb-6 text-indigo-700">Customer Details</h2>
+                <div id="customerDetails" class="space-y-6">
+                    <div class="space-y-2">
+                        <label for="senderName" class="block text-sm font-medium text-gray-700">Sender Name</label>
+                        <input type="text" id="senderName" placeholder="Enter sender's name" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="receiverName" class="block text-sm font-medium text-gray-700">Receiver Name</label>
+                        <input type="text" id="receiverName" placeholder="Enter receiver's name" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                        <select id="country" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                            <option value="">Select a country</option>
+                            <!-- Country options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
+                        <input type="text" id="currency" placeholder="Currency will be set automatically" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="proof" class="block text-sm font-medium text-gray-700">Proof</label>
+                        <input type="text" id="proof" placeholder="Enter proof details" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-xl rounded-2xl p-8 border border-indigo-100">
+                <h2 class="text-2xl font-semibold mb-6 text-indigo-700">Transaction Details</h2>
+                <div class="space-y-6">
+<div class="space-y-2">
+    <label for="rate" class="block text-sm font-medium text-gray-700">Exchange Rate</label>
+    <input type="number" id="rate" placeholder="Enter or edit the exchange rate" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+</div>
+
+                    <div class="space-y-2">
+                        <label for="sendingAmount" class="block text-sm font-medium text-gray-700">Amount to Send (GBP)</label>
+                        <input type="number" id="sendingAmount" placeholder="Enter amount to send" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="totalAmount" class="block text-sm font-medium text-gray-700">Total Amount (After Fee)</label>
+                        <input type="number" id="totalAmount" placeholder="Total amount including fee" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="receivingAmount" class="block text-sm font-medium text-gray-700">Amount to Receive</label>
+                        <input type="number" id="receivingAmount" placeholder="Amount to be received" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="feePercentage" class="block text-sm font-medium text-gray-700">Fee Percentage</label>
+                        <input type="number" id="feePercentage" placeholder="Fee percentage" class="mt-1 block w-full rounded-lg border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-3" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-xl rounded-2xl p-8 border border-indigo-100">
+                <h2 class="text-2xl font-semibold mb-6 text-indigo-700">Summary</h2>
+                <div class="space-y-6 text-lg">
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span class="text-gray-600">Total Sending:</span>
+                        <span id="totalSending" class="font-semibold text-indigo-700">0 GBP</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+                        <span class="text-gray-600">Total Receiving:</span>
+                        <span id="totalReceiving" class="font-semibold text-blue-600">0 GBP</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+                        <span class="text-gray-600">Agent Commission:</span>
+                        <span id="agentCommission" class="font-semibold text-green-600">0 GBP</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-indigo-50 rounded-lg">
+                        <span class="text-gray-600">Total After Comm & Receiving:</span>
+                        <span id="totalAfterCommissionAndReceiving" class="font-semibold text-indigo-700">0 GBP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="addTransactionBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-lg mb-8">
+            Add Transaction
+        </button>
+
+        <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-indigo-100">
+            <h2 class="text-2xl font-semibold p-6 bg-indigo-50 text-indigo-700">Transaction History</h2>
+            <div class="p-6">
+                <input type="text" id="searchInput" placeholder="Search transactions..." class="w-full p-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mb-4">
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sender</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiver</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rate</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sending (GBP)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (GBP)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiving</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent Commission</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Proof</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTable" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// Global variables
+let transactionCount = 0;
+let totalCommissionSum = 0;
+let agentCommissionSum = 0;
+let totalSendingSum = 0;
+let totalReceivingSum = 0;
+let availableCredit = 0;
+let transactions = [];
+let editingIndex = -1;
+let isSendMode = true;
+
+// Constants
+const API_KEY = 'd3eeb2f2eb18c0da989e830d';
+const BASE_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}`;
+
+// DOM Elements
+const rateInput = document.getElementById('rate');
+const sendingAmountInput = document.getElementById('sendingAmount');
+const feePercentageInput = document.getElementById('feePercentage');
+const totalAmountInput = document.getElementById('totalAmount');
+const receivingAmountInput = document.getElementById('receivingAmount');
+const addTransactionBtn = document.getElementById('addTransactionBtn');
+const transactionTable = document.getElementById('transactionTable');
+const totalSendingSpan = document.getElementById('totalSending');
+const agentCommissionSpan = document.getElementById('agentCommission');
+const totalAfterCommissionSpan = document.getElementById('totalAfterCommission');
+const searchInput = document.getElementById('searchInput');
+const sendModeBtn = document.getElementById('sendModeBtn');
+const receiveModeBtn = document.getElementById('receiveModeBtn');
+const senderNameInput = document.getElementById('senderName');
+const receiverNameInput = document.getElementById('receiverName');
+const countrySelect = document.getElementById('country');
+const currencyInput = document.getElementById('currency');
+const proofInput = document.getElementById('proof');
+
+// API Functions
+async function fetchSupportedCodes() {
+    try {
+        const response = await fetch(`${BASE_URL}/codes`);
+        const data = await response.json();
+        
+        if (data.result === 'success') {
+            return data.supported_codes;
+        } else {
+            throw new Error('Failed to fetch supported codes');
+        }
+    } catch (error) {
+        console.error('Error fetching supported codes:', error);
+        return null;
+    }
+}
+
+async function fetchExchangeRate(currency) {
+    try {
+        const response = await fetch(`${BASE_URL}/latest/GBP`);
+        const data = await response.json();
+        
+        if (data.result === 'success') {
+            const rate = data.conversion_rates[currency];
+            return rate ? { currency, rate } : null;
+        } else {
+            throw new Error('Failed to fetch exchange rate data');
+        }
+    } catch (error) {
+        console.error('Error fetching exchange rate:', error);
+        return null;
+    }
+}
+
+// UI Functions
+async function populateCountryDropdown() {
+    const supportedCodes = await fetchSupportedCodes();
+    if (supportedCodes) {
+        countrySelect.innerHTML = '<option value="">Select a country</option>';
+        supportedCodes.forEach(([code, name]) => {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${name} (${code})`;
+            countrySelect.appendChild(option);
+        });
+    } else {
+        alert('Failed to load country list. Please refresh the page or try again later.');
+    }
+}
+
+function setMode(mode, keepFields = false) {
+    isSendMode = mode === 'send';
+    if (isSendMode) {
+        sendModeBtn.classList.remove('text-indigo-700', 'bg-white');
+        sendModeBtn.classList.add('text-white', 'bg-indigo-700');
+        receiveModeBtn.classList.remove('text-white', 'bg-indigo-700');
+        receiveModeBtn.classList.add('text-indigo-700', 'bg-white');
+        document.querySelector('label[for="sendingAmount"]').textContent = 'Amount to Send (GBP)';
+        document.querySelector('label[for="receivingAmount"]').textContent = 'Amount to Receive';
+    } else {
+        receiveModeBtn.classList.remove('text-indigo-700', 'bg-white');
+        receiveModeBtn.classList.add('text-white', 'bg-indigo-700');
+        sendModeBtn.classList.remove('text-white', 'bg-indigo-700');
+        sendModeBtn.classList.add('text-indigo-700', 'bg-white');
+        document.querySelector('label[for="sendingAmount"]').textContent = 'Amount to Send';
+        document.querySelector('label[for="receivingAmount"]').textContent = 'Amount to Receive (GBP)';
+    }
+    
+    if (!keepFields) {
+        clearInputFields();
+    }
+}
+// Calculation Functions
+function calculateFeePercentage(amount) {
+    if (amount <= 10000) {
+        return 10;
+    } else if (amount <= 40000) {
+        return 8;
+    } else {
+        return 8; // You may want to add more tiers here
+    }
+}
+
+function calculateFromSending() {
+    const sendingAmount = parseFloat(sendingAmountInput.value) || 0;
+    const rate = parseFloat(rateInput.value) || 0;
+
+    if (isSendMode) {
+        const feePercentage = calculateFeePercentage(sendingAmount);
+        feePercentageInput.value = feePercentage.toFixed(2);
+
+        const fee = sendingAmount * (feePercentage / 100);
+        const totalAmount = sendingAmount + fee;
+        totalAmountInput.value = totalAmount.toFixed(2);
+        
+        receivingAmountInput.value = (sendingAmount * rate).toFixed(2);
+    } else {
+        receivingAmountInput.value = (sendingAmount / rate).toFixed(2);
+        totalAmountInput.value = sendingAmount.toFixed(2);
+        feePercentageInput.value = '0.00';
+    }
+}
+
+function calculateFromTotal() {
+    const totalAmount = parseFloat(totalAmountInput.value) || 0;
+    const rate = parseFloat(rateInput.value) || 0;
+
+    if (isSendMode) {
+        const feePercentage = calculateFeePercentage(totalAmount);
+        feePercentageInput.value = feePercentage.toFixed(2);
+
+        const fee = totalAmount * (feePercentage / 100);
+        const sendingAmount = totalAmount - fee;
+        sendingAmountInput.value = sendingAmount.toFixed(2);
+        
+        receivingAmountInput.value = (sendingAmount * rate).toFixed(2);
+    } else {
+        sendingAmountInput.value = totalAmount.toFixed(2);
+        receivingAmountInput.value = (totalAmount / rate).toFixed(2);
+        feePercentageInput.value = '0.00';
+    }
+}
+
+function calculateFromReceiving() {
+    const receivingAmount = parseFloat(receivingAmountInput.value) || 0;
+    const rate = parseFloat(rateInput.value) || 0;
+
+    if (isSendMode && rate > 0) {
+        const sendingAmount = receivingAmount / rate;
+        const feePercentage = calculateFeePercentage(sendingAmount);
+        feePercentageInput.value = feePercentage.toFixed(2);
+
+        const fee = sendingAmount * (feePercentage / 100);
+        const totalAmount = sendingAmount + fee;
+        sendingAmountInput.value = sendingAmount.toFixed(2);
+        totalAmountInput.value = totalAmount.toFixed(2);
+    } else if (!isSendMode) {
+        const sendingAmount = receivingAmount * rate;
+        sendingAmountInput.value = sendingAmount.toFixed(2);
+        totalAmountInput.value = sendingAmount.toFixed(2);
+        feePercentageInput.value = '0.00';
+    }
+}
+
+// Transaction Functions
+function addOrUpdateTransaction() {
+    if (!isSendMode && parseFloat(receivingAmountInput.value) > availableCredit) {
+        alert('Insufficient credit for this receiving transaction.');
+        return;
+    }
+
+    const rate = parseFloat(rateInput.value) || 0;
+    const sendingAmount = parseFloat(sendingAmountInput.value) || 0;
+    const totalAmount = parseFloat(totalAmountInput.value) || 0;
+    const feePercentage = parseFloat(feePercentageInput.value) || 0;
+    const receivingAmount = parseFloat(receivingAmountInput.value) || 0;
+
+    const fee = isSendMode ? (totalAmount - sendingAmount) : 0;
+    const agentCommissionPercentage = isSendMode ? (feePercentage * 0.25) : 0;
+    const agentCommission = isSendMode ? (fee * 0.25) : 0;
+
+    const transaction = {
+        date: editingIndex === -1 ? new Date().toLocaleDateString() : transactions[editingIndex].date,
+        type: isSendMode ? 'Send' : 'Receive',
+        senderName: senderNameInput.value,
+        receiverName: receiverNameInput.value,
+        country: countrySelect.options[countrySelect.selectedIndex].text,
+        rate,
+        sendingAmount: isSendMode ? sendingAmount : totalAmount,
+        totalAmount: isSendMode ? totalAmount : sendingAmount,
+        receivingAmount: isSendMode ? receivingAmount : parseFloat(receivingAmountInput.value),
+        currency: currencyInput.value,
+        fee,
+        feePercentage,
+        agentCommission,
+        agentCommissionPercentage,
+        proof: proofInput.value
+    };
+
+    if (editingIndex === -1) {
+        // Add new transaction
+        transactions.push(transaction);
+        transactionCount++;
+    } else {
+        // Update existing transaction
+        transactions[editingIndex] = transaction;
+    }
+
+    updateTransactionTable(searchInput.value);
+    updateSummary();
+    clearInputFields();
+    editingIndex = -1;
+    addTransactionBtn.textContent = 'Add Transaction';
+}
+function updateTransactionTable(searchTerm = '') {
+    transactionTable.innerHTML = '';
+    transactions.forEach((transaction, index) => {
+        if (searchTransaction(transaction, searchTerm)) {
+            const row = transactionTable.insertRow();
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${index + 1}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${transaction.date}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.type}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.senderName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.receiverName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.country}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${transaction.rate.toFixed(4)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.sendingAmount.toFixed(2)} ${transaction.type === 'Receive' ? transaction.currency : 'GBP'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">${transaction.totalAmount.toFixed(2)} ${transaction.type === 'Receive' ? transaction.currency : 'GBP'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.receivingAmount.toFixed(2)} ${transaction.type === 'Send' ? transaction.currency : 'GBP'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">${transaction.fee.toFixed(2)} (${transaction.feePercentage}%)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">${transaction.agentCommission.toFixed(2)} (${transaction.agentCommissionPercentage.toFixed(2)}%)</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${transaction.proof}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button data-action="edit" data-index="${index}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+                    <button data-action="delete" data-index="${index}" class="text-red-600 hover:text-red-900">Delete</button>
+                </td>
+            `;
+        }
+    });
+}
+
+// Add this event listener after the updateTransactionTable function
+transactionTable.addEventListener('click', function(event) {
+    const target = event.target;
+    if (target.tagName === 'BUTTON') {
+        const action = target.dataset.action;
+        const index = parseInt(target.dataset.index, 10);
+        if (action === 'edit') {
+            editTransaction(index);
+        } else if (action === 'delete') {
+            deleteTransaction(index);
+        }
+    }
+});
+
+function searchTransaction(transaction, searchTerm) {
+    if (!searchTerm) return true;
+    searchTerm = searchTerm.toLowerCase();
+    return (
+        transaction.senderName.toLowerCase().includes(searchTerm) ||
+        transaction.receiverName.toLowerCase().includes(searchTerm) ||
+        transaction.country.toLowerCase().includes(searchTerm) ||
+        transaction.currency.toLowerCase().includes(searchTerm) ||
+        transaction.proof.toLowerCase().includes(searchTerm) ||
+        transaction.date.toLowerCase().includes(searchTerm) ||
+        transaction.type.toLowerCase().includes(searchTerm) ||
+        transaction.sendingAmount.toString().includes(searchTerm) ||
+        transaction.totalAmount.toString().includes(searchTerm) ||
+        transaction.receivingAmount.toString().includes(searchTerm)
+    );
+}
+
+function updateSummary() {
+    totalSendingSum = transactions.reduce((sum, t) => t.type === 'Send' ? sum + t.totalAmount : sum, 0);
+    totalReceivingSum = transactions.reduce((sum, t) => t.type === 'Receive' ? sum + t.receivingAmount : sum, 0);
+    agentCommissionSum = transactions.reduce((sum, t) => sum + t.agentCommission, 0);
+    availableCredit = totalSendingSum - totalReceivingSum - agentCommissionSum;
+
+    totalSendingSpan.innerText = totalSendingSum.toFixed(2) + ' GBP';
+    document.getElementById('totalReceiving').innerText = totalReceivingSum.toFixed(2) + ' GBP';
+    agentCommissionSpan.innerText = agentCommissionSum.toFixed(2) + ' GBP';
+    document.getElementById('totalAfterCommissionAndReceiving').innerText = availableCredit.toFixed(2) + ' GBP';
+}
+
+function clearInputFields() {
+    senderNameInput.value = '';
+    receiverNameInput.value = '';
+    countrySelect.value = '';
+    currencyInput.value = '';
+    proofInput.value = '';
+    rateInput.value = '';
+    sendingAmountInput.value = '';
+    feePercentageInput.value = '';
+    totalAmountInput.value = '';
+    receivingAmountInput.value = '';
+}
+
+function editTransaction(index) {
+    editingIndex = index;
+    const transaction = transactions[index];
+
+    senderNameInput.value = transaction.senderName;
+    receiverNameInput.value = transaction.receiverName;
+    
+    // Find the correct option in the country dropdown
+    const countryOption = Array.from(countrySelect.options).find(option => 
+        option.textContent.includes(transaction.country)
+    );
+    if (countryOption) {
+        countrySelect.value = countryOption.value;
+        currencyInput.value = transaction.currency;
+    } else {
+        console.warn(`Country not found in dropdown: ${transaction.country}`);
+        countrySelect.value = '';
+        currencyInput.value = '';
+    }
+
+    proofInput.value = transaction.proof;
+    rateInput.value = transaction.rate.toFixed(4);
+    sendingAmountInput.value = transaction.sendingAmount.toFixed(2);
+    feePercentageInput.value = transaction.feePercentage.toFixed(2);
+    totalAmountInput.value = transaction.totalAmount.toFixed(2);
+    receivingAmountInput.value = transaction.receivingAmount.toFixed(2);
+
+    setMode(transaction.type.toLowerCase(), true);
+    addTransactionBtn.textContent = 'Update Transaction';
+    window.scrollTo(0, 0);
+}
+
+function deleteTransaction(index) {
+    if (confirm('Are you sure you want to delete this transaction?')) {
+        transactions.splice(index, 1);
+        updateTransactionTable(searchInput.value);
+        updateSummary();
+    }
+}
+
+// Event Listeners
+rateInput.addEventListener('input', calculateFromSending); // Recalculate when the user manually edits the rate
+sendingAmountInput.addEventListener('input', calculateFromSending);
+totalAmountInput.addEventListener('input', calculateFromTotal);
+receivingAmountInput.addEventListener('input', calculateFromReceiving);
+feePercentageInput.addEventListener('input', calculateFromSending);
+addTransactionBtn.addEventListener('click', addOrUpdateTransaction);
+searchInput.addEventListener('input', function() {
+    updateTransactionTable(this.value);
+});
+sendModeBtn.addEventListener('click', () => setMode('send'));
+receiveModeBtn.addEventListener('click', () => setMode('receive'));
+
+
+countrySelect.addEventListener('change', async function() {
+    const selectedCurrency = this.value;
+    if (selectedCurrency) {
+        const exchangeRateData = await fetchExchangeRate(selectedCurrency);
+        if (exchangeRateData) {
+            rateInput.value = exchangeRateData.rate.toFixed(4);
+            currencyInput.value = selectedCurrency;
+            calculateFromSending(); // Recalculate amounts based on new rate
+        } else {
+            alert('Could not fetch exchange rate for the selected country. Please try again.');
+            this.value = ''; // Reset the dropdown
+            rateInput.value = '';
+            currencyInput.value = '';
+        }
+    } else {
+        rateInput.value = '';
+        currencyInput.value = '';
+    }
+});
+
+// Initial setup
+window.addEventListener('DOMContentLoaded', async (event) => {
+    await populateCountryDropdown();
+    setMode('send');
+    updateTransactionTable();
+    updateSummary();
+});
+
+// Helper Functions
+function formatCurrency(amount, currency) {
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: currency }).format(amount);
+}
+
+function parseFormattedCurrency(formattedAmount) {
+    return parseFloat(formattedAmount.replace(/[^\d.-]/g, ''));
+}
+
+// Error Handling
+function handleAPIError(error) {
+    console.error('API Error:', error);
+    alert('An error occurred while fetching data. Please try again later.');
+}
+
+    </script>
+</body>
+</html>
